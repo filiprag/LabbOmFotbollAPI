@@ -24,79 +24,122 @@ namespace LabbOmFotbollAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Arena>>> GetArenas()
         {
-            return await _context.Arenas.ToListAsync();
+            try
+            {
+                return await _context.Arenas.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                throw null;
+            }
         }
 
         // GET: api/Arenas/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Arena>> GetArena(int id)
         {
-            var arena = await _context.Arenas.FindAsync(id);
-
-            if (arena == null)
-            {
-                return NotFound();
-            }
-
-            return arena;
-        }
-
-        // PUT: api/Arenas/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutArena(int id, Arena arena)
-        {
-            if (id != arena.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(arena).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ArenaExists(id))
+                var arena = await _context.Arenas.FindAsync(id);
+
+                if (arena == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                return arena;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                throw null;
             }
 
-            return NoContent();
+        }
+        // Dena funktion är ej implenterad & används ej
+        // PUT: api/Arenas/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutArena(int id, Arena arena)
+        {
+            try
+            {
+
+                if (id != arena.Id)
+                {
+                    return BadRequest();
+                }
+
+                _context.Entry(arena).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ArenaExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                throw null;
+            }
         }
 
+        // Dena funktion är ej implenterad & används ej
         // POST: api/Arenas
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Arena>> PostArena(Arena arena)
         {
-            _context.Arenas.Add(arena);
-            await _context.SaveChangesAsync();
+            try
+            {
 
-            return CreatedAtAction("GetArena", new { id = arena.Id }, arena);
+                _context.Arenas.Add(arena);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetArena", new { id = arena.Id }, arena);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                throw null;
+            }
         }
 
+        // Dena funktion är ej implenterad & används ej
         // DELETE: api/Arenas/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArena(int id)
         {
-            var arena = await _context.Arenas.FindAsync(id);
-            if (arena == null)
+            try
             {
-                return NotFound();
+                var arena = await _context.Arenas.FindAsync(id);
+                if (arena == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Arenas.Remove(arena);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
             }
-
-            _context.Arenas.Remove(arena);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                throw null;
+            }
         }
 
         private bool ArenaExists(int id)
